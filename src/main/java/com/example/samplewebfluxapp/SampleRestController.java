@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 @RestController
 
 public class SampleRestController {
@@ -23,5 +25,14 @@ public class SampleRestController {
     @RequestMapping("/flux2")
     public Flux<String> flux2() {
         return Flux.just("Hello Flux. ","これはFluxのサンプルです。");
+    }
+
+    @Autowired
+    PostRepository postRepository;
+
+    @RequestMapping("/post")
+    public Mono<Post> post() {
+        Post post = new Post(0,0,"dummy","dummy message...");
+        return Mono.just(post);
     }
 }
