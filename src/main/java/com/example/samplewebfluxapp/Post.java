@@ -35,7 +35,6 @@ public class Post {
     }
 
     public String toString() {
-        return "{id:" + id + ", userId:" + userId + ", title:¥"" + title + "¥", body:¥""
-         + body + "¥"}";
+        return "{id:" + id + ", userId:" + userId + ", title:\"" + title + "\", body:\"" + body + "\"}";   
 }
 }
