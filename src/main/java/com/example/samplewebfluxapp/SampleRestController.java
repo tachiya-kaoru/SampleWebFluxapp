@@ -8,6 +8,9 @@ import reactor.core.publisher.Flux;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import jakarta.annotation.PostConstruct;
+
 @RestController
 
 public class SampleRestController {
@@ -28,11 +31,27 @@ public class SampleRestController {
     }
 
     @Autowired
-    PostRepository postRepository;
+    PostRepository repository;
 
     @RequestMapping("/post")
     public Mono<Post> post() {
         Post post = new Post(0,0,"dummy","dummy message...");
         return Mono.just(post);
+    }
+
+    @RequestMapping("/post/{id}")
+    public Mono<Post> post(@PathVariable int id) {
+        Post post = repository.findById(id);
+        return Mono.just(post);
+    }
+
+    @PostConstruct
+    public void init() {
+        Post p1 = new Post(1,1,"Hello", "Hello FLux!");
+        Post p2 = new Post(2,2,"Sample", "This is sample post");
+        Post p3 = new Post(3,3,"ハロー", "これはサンプルです。");
+        repository.saveAndFlush(p1);
+        repository.saveAndFlush(p2);
+        repository.saveAndFlush(p3);
     }
 }
