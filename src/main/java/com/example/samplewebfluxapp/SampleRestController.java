@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;
 
 @RestController
 
@@ -42,6 +43,12 @@ public class SampleRestController {
     public Mono<Post> post(@PathVariable int id) {
         Post post = repository.findById(id);
         return Mono.just(post);
+    }
+
+    @RequestMapping("/posts")
+    public Flux<Object> posts() {
+        List<Post> posts = repository.findAll();
+        return Flux.fromArray(posts.toArray());
     }
 
     @PostConstruct
