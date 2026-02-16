@@ -7,9 +7,18 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+
 
 @RestController
 
@@ -49,6 +58,23 @@ public class SampleRestController {
     public Flux<Object> posts() {
         List<Post> posts = repository.findAll();
         return Flux.fromArray(posts.toArray());
+    }
+    @RequestMapping("/file")
+    public Mono<String> file() {
+        String result = "";
+        try {
+            ClassPathResource cr = new ClassPathResource("sample.txt");
+            InputStream is = cr.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }            
+        } catch (IOException e) {
+            result = e.getMessage();
+        }
+        return Mono.just(result);
     }
 
     @PostConstruct
