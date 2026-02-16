@@ -19,7 +19,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.http.MediaType;  
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+  
 
 
 
@@ -98,6 +101,18 @@ public class SampleRestController {
         .retrieve()
         .bodyToFlux(Post.class);
     }
+
+    @RequestMapping("/webpost/{id}")
+    public Mono<Post> web3(@PathVariable int id) {
+        Post post = repository.findById(id);
+        return this.webClient.post()
+        .uri("/posts")
+        .accept(MediaType.APPLICATION_JSON)
+        .bodyValue(post)
+        .retrieve()
+        .bodyToMono(Post.class);
+    }
+    
 
     @PostConstruct
     public void init() {
