@@ -18,10 +18,14 @@ public class SampleController {
    
     @Bean
     public RouterFunction<ServerResponse> routes() {
-        return route(GET("/f/hello"), this::hello);
+        return route(GET("/f/hello"), this::hello)
+        .andRoute(GET("/f/hello2"), this::hello2);
     }
 
     Mono<ServerResponse> hello(ServerRequest req) {
         return ok().body(Mono.just("Hello Functional routing world!"), String.class);
+    }
+    Mono<ServerResponse> hello2(ServerRequest req) {
+        return ok().body(Mono.just("関数ルーティングの世界へようこそ!"), String.class);
     }
 }
