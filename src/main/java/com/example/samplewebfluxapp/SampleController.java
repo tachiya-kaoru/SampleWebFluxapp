@@ -11,11 +11,18 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import org.springframework.web.reactive.function.server.ServerRequest;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.reactive.result.view.Rendering;
+
 import reactor.core.publisher.Mono;
 
 @Controller
 public class SampleController {
-   
+
+    @RequestMapping("/f/flux")
+    Mono<Rendering> flux() {
+        return Mono.just(Rendering.view("flux").build());
+    }
     @Bean
     public RouterFunction<ServerResponse> routes() {
         return route(GET("/f/hello"), this::hello)
