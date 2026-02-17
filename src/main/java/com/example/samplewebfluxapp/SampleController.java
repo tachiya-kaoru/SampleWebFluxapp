@@ -16,15 +16,23 @@ import org.springframework.web.reactive.result.view.Rendering;
 
 import org.springframework.http.MediaType;
 
+import org.springframework.ui.Model;
+
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
+import java.util.HashMap;
 
 @Controller
 public class SampleController {
 
     @RequestMapping("/f/flux")
-    Mono<Rendering> flux() {
+    Mono<Rendering> flux(Model model) {
+        model.addAttribute("title", "Flux/Request Handler");
+        model.addAttribute("msg","これはリクエストハンドラのサンプルです。");
         return Mono.just(Rendering.view("flux").build());
     }
+
     @Bean
     public RouterFunction<ServerResponse> routes() {
         return route(GET("/f/hello"), this::hello)
@@ -33,7 +41,10 @@ public class SampleController {
     }
 
     Mono<ServerResponse> flux2(ServerRequest req) {
-        return ok().contentType(MediaType.TEXT_HTML).render("flux");
+        Map map = new HashMap();
+        map.put("title", "Flux/Function routing");
+        map.put("msg","関数ルーティングのサンプルです。");
+        return ok().contentType(MediaType.TEXT_HTML).render("flux", map);
     }
 
     Mono<ServerResponse> hello(ServerRequest req) {
