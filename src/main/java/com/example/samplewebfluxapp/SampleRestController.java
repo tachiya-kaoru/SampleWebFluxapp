@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
   
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 
@@ -48,13 +49,16 @@ public class SampleRestController {
     @Autowired
     PostRepository repository;
 
-    @RequestMapping("/post")
+    @RequestMapping("/post")  
+    
     public Mono<Post> post() {
         Post post = new Post(0,0,"dummy","dummy message...");
         return Mono.just(post);
     }
 
+    @CrossOrigin
     @RequestMapping("/post/{id}")
+    
     public Mono<Post> post(@PathVariable int id) {
         Post post = repository.findById(id);
         return Mono.just(post);
